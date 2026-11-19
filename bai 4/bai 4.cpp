@@ -8,29 +8,29 @@ typedef struct{
 
 typedef struct tagNode{
     Data infor;
-    struct tagNode *link;
+    struct tagNode *next, *prev;
 }Node;
 
 typedef struct{
     Node *pHead;
     Node *pTail;
     int spt;
-}LList;
+}DList;
 
 /////////////////////////////////////
-void initList(LList *L){
+void initList(DList *L){
     L->pHead = NULL;
     L->pTail = NULL;
     L->spt = 0;
 }
 
 /////////////////////////////////////
-int emptyList(LList L){
+int emptyList(DList L){
     return (L.spt == 0);
 }
 
 /////////////////////////////////////
-void insert_Head(LList *L, Data x){
+void insert_Head(DList *L, Data x){
     Node *pp;
     pp = (Node*)malloc(sizeof(Node));
     if(pp == NULL){
@@ -38,20 +38,22 @@ void insert_Head(LList *L, Data x){
         return;
     }
     pp->infor = x;
-    pp->link = NULL;
+    PP->next = NULL;
+    pp->prev = NULL;
     if(emptyList(*L)){
         L->pHead = pp;
         L->pTail = pp;
     }
     else{
-        pp->link = L->pHead;
+        L->pHead->prev=pp;
+        pp->next = L->pHead;
         L->pHead = pp;
     }
     L->spt++;
 }
 
 /////////////////////////////////////
-void insert_Tail(LList *L, Data x){
+void insert_Tail(DList *L, Data x){
     Node *pp;
     pp = (Node*)malloc(sizeof(Node));
     if(pp == NULL){
@@ -59,21 +61,23 @@ void insert_Tail(LList *L, Data x){
         return;
     }
     pp->infor = x;
-    pp->link = NULL;
+    pp->next = NULL;
+    pp->prev = NULL;
     if(emptyList(*L)){
         L->pHead = pp;
         L->pTail = pp;
     }
     else{
-        L->pTail->link = pp;
-        L->pTail = pp;
+        L->pTail->next = pp;
+        pp->prev = L->pTail;
+        L->pTail=pp;
     }
     L->spt++;
 }
 
 /////////////////////////////////////
-void insert_After(LList *L, int ma, Data x){
-    Node *p = L->pHead;
+void insert_After(DList *L, Node *q, Data x){
+    Node *pp;
     while(p != NULL && p->infor.masv != ma){
         p = p->link;
     }
